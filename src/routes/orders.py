@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 
+from src.auth import require_api_key
 from src.dex.drift import Drift
 from src.dex.hyperliquid import Hyperliquid
 from src.dex.lighter import Lighter
@@ -16,6 +17,7 @@ dex_clients = {
 order_service = OrderService(dex_clients)
 
 @orders_bp.route('/orders', methods=['POST'])
+@require_api_key
 def place_order():
     order_details = request.get_json()
     if not order_details:
@@ -28,6 +30,7 @@ def place_order():
         return jsonify({"message": str(e)}), 400
 
 @orders_bp.route('/orders/batch', methods=['POST'])
+@require_api_key
 def place_batch_orders():
     orders = request.get_json()
     if not isinstance(orders, list):
@@ -40,6 +43,7 @@ def place_batch_orders():
         return jsonify({"message": str(e)}), 400
 
 @orders_bp.route('/orders/<dex_name>/<order_id>/cancel', methods=['POST'])
+@require_api_key
 def cancel_order(dex_name, order_id):
     try:
         result = order_service.cancel_order(dex_name, order_id)

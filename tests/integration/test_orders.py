@@ -14,7 +14,7 @@ class TestOrdersEndpoint(unittest.TestCase):
     def test_place_spot_order_success(self, MockOrderService):
         mock_service_instance = MockOrderService.return_value
         mock_service_instance.place_order.return_value = {
-            "order_id": "hyper123",
+            "order_id": "hyper_spot_123",
             "status": "filled"
         }
 

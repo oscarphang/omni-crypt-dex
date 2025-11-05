@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 
+from src.auth import require_api_key
 from src.dex.drift import Drift
 from src.dex.hyperliquid import Hyperliquid
 from src.dex.lighter import Lighter
