@@ -8,13 +8,13 @@ class TestPriceService(unittest.TestCase):
     def test_get_aggregated_prices(self):
         # Mocking DEX clients
         mock_hyperliquid = MagicMock()
-        mock_hyperliquid.get_price.return_value = {"BTC-USD": 50000}
+        mock_hyperliquid.get_price.return_value = 50000
 
         mock_lighter = MagicMock()
-        mock_lighter.get_price.return_value = {"BTC-USD": 50100}
+        mock_lighter.get_price.return_value = 50100
 
         mock_drift = MagicMock()
-        mock_drift.get_price.return_value = {"BTC-USD": 50050}
+        mock_drift.get_price.return_value = 50050
 
         dex_clients = {
             "hyperliquid": mock_hyperliquid,

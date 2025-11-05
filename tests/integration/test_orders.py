@@ -29,7 +29,7 @@ class TestOrdersEndpoint(unittest.TestCase):
         response = self.client.post('/orders', data=json.dumps(order_payload), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
-        self.assertEqual(data["order_id"], "hyper123")
+        self.assertEqual(data["order_id"], "hyper_spot_123")
 
     @patch('src.routes.orders.OrderService')
     def test_place_perp_order_success(self, MockOrderService):
