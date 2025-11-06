@@ -4,8 +4,12 @@ from unittest.mock import MagicMock
 from src.services.price_service import PriceService
 
 
+from driftpy.types import OraclePriceData
+from src.dex.drift import Drift
+
 class TestPriceService(unittest.TestCase):
-    def test_get_aggregated_prices(self):
+    @patch('src.dex.drift.DriftClient')
+    def test_get_aggregated_prices(self, MockDriftClient):
         # Mocking DEX clients
         mock_hyperliquid = MagicMock()
         mock_hyperliquid.get_price.return_value = 50000.0
@@ -13,13 +17,20 @@ class TestPriceService(unittest.TestCase):
         mock_lighter = MagicMock()
         mock_lighter.get_price.return_value = 50100.0
 
-        mock_drift = MagicMock()
-        mock_drift.get_price.return_value = 50050.0
+        # Mock the DriftClient's methods
+        mock_drift_client_instance = MockDriftClient.return_value
+        mock_drift_client_instance.get_oracle_price_data_for_perp_market.return_value = OraclePriceData(
+            price=50050 * 1e6, # PRICE_PRECISION
+            slot=0,
+            confidence=0,
+            has_sufficient_number_of_data_points=True
+        )
+        mock_drift = Drift()
 
         dex_clients = {
             "hyperliquid": mock_hyperliquid,
             "lighter": mock_lighter,
-            "drift": mock_drift
+            "drift": mock_drift,
         }
 
         price_service = PriceService(dex_clients)
